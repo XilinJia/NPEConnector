@@ -25,7 +25,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
 
     var selectedDownloadUrl: String? = null
 
-    internal var channelInfo: ChannelInfo? = null
+    var channelInfo: ChannelInfo? = null
 
     private var playlistInfo: PlaylistInfo? = null
 
