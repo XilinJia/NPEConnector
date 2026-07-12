@@ -52,7 +52,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         return feed_
     }
 
-    internal suspend fun feedFromChannel(index: Int, title: String): FeedIPC? {
+    suspend fun feedFromChannel(index: Int, title: String): FeedIPC? {
         val cInfo = channelInfo ?: return null
         if (index >= cInfo.tabs.size) return null
         var url = cInfo.tabs[index].url
@@ -74,7 +74,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         }
     }
 
-    internal suspend fun episodesFromChannel(total: Int, since: Long = 0L): List<EpisodeIPC> {
+    suspend fun episodesFromChannel(total: Int, since: Long = 0L): List<EpisodeIPC> {
         val cInfo = channelInfo ?: return listOf()
 
         val titleSet = hashSetOf<String>()
@@ -112,7 +112,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         return eList.toList()
     }
 
-    internal suspend fun feedFromPlaylist(): FeedIPC? {
+    suspend fun feedFromPlaylist(): FeedIPC? {
         return try {
             playlistInfo = PlaylistInfo.getInfo(service, urlInit) ?: return null
             selectedDownloadUrl = prepareUrl(urlInit)
@@ -130,7 +130,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         }
     }
 
-    internal suspend fun episodesFromList(total: Int, since: Long = 0L): List<EpisodeIPC> {
+    suspend fun episodesFromList(total: Int, since: Long = 0L): List<EpisodeIPC> {
         val titleSet = hashSetOf<String>()
         var count = 0
         val eList = mutableSetOf<EpisodeIPC>()
@@ -171,7 +171,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
     companion object {
         const val EPISODES_LIMIT = 5000
 
-        internal fun episodeFrom(item: StreamInfoItem): EpisodeIPC {
+        fun episodeFrom(item: StreamInfoItem): EpisodeIPC {
             val e = EpisodeIPC()
             e.link = item.url
             e.title = item.name
@@ -188,7 +188,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
             return e
         }
 
-        internal fun episodeFrom(info: StreamInfo): EpisodeIPC {
+        fun episodeFrom(info: StreamInfo): EpisodeIPC {
             val e = EpisodeIPC()
             e.link = info.url
             e.title = info.name
