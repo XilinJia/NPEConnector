@@ -6,26 +6,47 @@ import android.util.Log
 import org.schabi.newpipe.extractor.NewPipe
 import org.schabi.newpipe.extractor.channel.ChannelInfoItem
 import org.schabi.newpipe.extractor.exceptions.ExtractionException
+import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
 import org.schabi.newpipe.extractor.search.SearchInfo
 
-class FeedSearcher(val name_: String, val serviceId: Int) : IFeedSearchProvider.Stub() {
-    override fun search(query: String): List<FeedSearchResult> {
-        fun resultFrom(info: ChannelInfoItem): FeedSearchResult {
-            val title = info.name
-            val imageUrl: String? = if (info.thumbnails.isNotEmpty()) info.thumbnails[0].url else null
-            val feedUrl = info.url
-            val author = ""
-            val count: Int = info.streamCount.toInt()
-            val update: String? = null
-            val subscriberCount = info.subscriberCount.toInt()
-            return FeedSearchResult(title, imageUrl, feedUrl, author, count, update, subscriberCount, name_)
-        }
+open class FeedSearcher(val name_: String, val serviceId: Int) : IFeedSearchProvider.Stub() {
+    fun ChannelInfoItem.toFeedSearchResult(): FeedSearchResult {
+        val title = this.name
+        val imageUrl: String? = if (this.thumbnails.isNotEmpty()) this.thumbnails[0].url else null
+        val feedUrl = this.url
+        val author = ""
+        val count: Int = this.streamCount.toInt()
+        val update: String? = null
+        val subscriberCount = this.subscriberCount.toInt()
+        return FeedSearchResult(title, imageUrl, feedUrl, author, count, update, subscriberCount, name_)
+    }
 
+    fun PlaylistInfoItem.toFeedSearchResult(): FeedSearchResult {
+        val title = this.name
+        val imageUrl: String? = if (this.thumbnails.isNotEmpty()) this.thumbnails[0].url else null
+        val feedUrl = this.url
+        val author = ""
+        val count: Int = this.streamCount.toInt()
+        val update: String? = null
+        val subscriberCount = 0
+        return FeedSearchResult(title, imageUrl, feedUrl, author, count, update, subscriberCount, name_)
+    }
+
+    open val contentFilter: List<String> = listOf("channels", "playlists")
+
+    override fun search(query: String): List<FeedSearchResult> {
         val service = try { NewPipe.getService(serviceId) } catch (e: ExtractionException) { throw ExtractionException("NewPipe service not found") }
         try {
-            val searchInfo = SearchInfo.getInfo(service, service.getSearchQHFactory().fromQuery(query, listOf("channels"), ""))
             val podResults: MutableList<FeedSearchResult> = mutableListOf()
-            for (ch in searchInfo.relatedItems) podResults.add(resultFrom(ch as ChannelInfoItem))
+            for (filer in contentFilter) {
+                val searchInfo = SearchInfo.getInfo(service, service.searchQHFactory.fromQuery(query, listOf(filer), ""))
+                for (item in searchInfo.relatedItems) {
+                    when (item) {
+                        is ChannelInfoItem -> podResults.add(item.toFeedSearchResult())
+                        is PlaylistInfoItem -> podResults.add(item.toFeedSearchResult())
+                    }
+                }
+            }
             return podResults
         } catch (e: Throwable) { Log.e("FeedSearcher", "error: ${e.message}") }
         return listOf()

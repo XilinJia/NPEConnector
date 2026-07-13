@@ -7,7 +7,6 @@ import ac.mdiq.podcini.shared.prepareUrl
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -17,7 +16,6 @@ import org.schabi.newpipe.extractor.StreamingService
 import org.schabi.newpipe.extractor.channel.ChannelInfo
 import org.schabi.newpipe.extractor.channel.tabs.ChannelTabInfo
 import org.schabi.newpipe.extractor.playlist.PlaylistInfo
-import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 
 class FeedBuilder(val feedType: String, var urlInit: String, val service: StreamingService) {
@@ -90,7 +88,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                     nextPage = null
                     break
                 }
-                val e = episodeFrom(r)
+                val e = r.toEpisodeIPC()
                 if (e.title == null || e.title in titleSet) continue
                 titleSet.add(e.title!!)
                 e.feedId = feedId
@@ -147,7 +145,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                     break
                 }
                 count++
-                val e = episodeFrom(r)
+                val e = r.toEpisodeIPC()
                 if (e.title == null || e.title in titleSet) continue
                 e.feedId = feedId
                 eList.add(e)
@@ -170,38 +168,5 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
 
     companion object {
         const val EPISODES_LIMIT = 5000
-
-        fun episodeFrom(item: StreamInfoItem): EpisodeIPC {
-            val e = EpisodeIPC()
-            e.link = item.url
-            e.title = item.name
-            e.description = "Short: ${item.shortDescription}"
-            e.imageUrl = item.thumbnails.first().url
-            e.pubDate = item.uploadDate?.localDateTime?.toKotlinLocalDateTime()?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds() ?: 0
-            e.viewCount = item.viewCount.toInt()
-            e.size = 0
-            e.mimeType = "video/*"
-            e.fileUrl = null
-            e.downloadUrl = item.url
-            if (item.duration > 0) e.duration = item.duration.toInt() * 1000
-//            e.likeCount = item.likeCount.toInt() // TODO: need to get likeCount
-            return e
-        }
-
-        fun episodeFrom(info: StreamInfo): EpisodeIPC {
-            val e = EpisodeIPC()
-            e.link = info.url
-            e.title = info.name
-            e.description = info.description?.content
-            e.imageUrl = info.thumbnails.first().url
-            e.pubDate = info.uploadDate?.localDateTime?.let { LocalDateTime(year = it.year, month = it.monthValue, day = it.dayOfMonth, hour = it.hour, minute = it.minute, second = it.second).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds() } ?: 0
-            e.viewCount = info.viewCount.toInt()
-            e.likeCount = info.likeCount.toInt()
-            e.downloadUrl = info.url
-            e.size = 0
-            e.mimeType = "video/*"
-            if (info.duration > 0) e.duration = info.duration.toInt() * 1000
-            return e
-        }
     }
 }

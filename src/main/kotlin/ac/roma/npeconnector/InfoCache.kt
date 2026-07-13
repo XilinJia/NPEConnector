@@ -21,13 +21,11 @@ class InfoCache private constructor() {
     }
 
     fun getFromKey(serviceId: Int, url: String, cacheType: Type): Info? {
-        Log.d(TAG, ("getFromKey() called with: serviceId = [$serviceId], url = [$url]"))
+//        Log.d(TAG, ("getFromKey() called with: serviceId = [$serviceId], url = [$url]"))
         synchronized(LRU_CACHE) { return getInfo(keyOf(serviceId, url, cacheType)) }
     }
 
     fun putInfo(serviceId: Int, url: String, info: Info, cacheType: Type) {
-        Log.d(TAG, "putInfo() called with: info = [$info]")
-
         val expirationMillis = getCacheExpirationMillis(info.serviceId)
         synchronized(LRU_CACHE) {
             val data = CacheData(info, expirationMillis)
@@ -41,17 +39,15 @@ class InfoCache private constructor() {
     }
 
     fun removeInfo(serviceId: Int, url: String, cacheType: Type) {
-        Log.d(TAG, ("removeInfo() called with: serviceId = [$serviceId], url = [$url]"))
+//        Log.d(TAG, ("removeInfo() called with: serviceId = [$serviceId], url = [$url]"))
         synchronized(LRU_CACHE) { LRU_CACHE.remove(keyOf(serviceId, url, cacheType)) }
     }
 
     fun clearCache() {
-        Log.d(TAG, "clearCache() called")
         synchronized(LRU_CACHE) { LRU_CACHE.evictAll() }
     }
 
     fun trimCache() {
-        Log.d(TAG, "trimCache() called")
         synchronized(LRU_CACHE) {
             removeStaleCache()
             LRU_CACHE.trimToSize(TRIM_CACHE_TO)
