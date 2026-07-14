@@ -1,3 +1,7 @@
+# 1.1.2
+
+* upped PodciniLib to 1.1.1
+
 # 1.1.1
 
 * enabled hasVideo option in buildFeed

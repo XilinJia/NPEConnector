@@ -75,7 +75,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:3.5.1")
     implementation("io.ktor:ktor-utils:3.5.1")
 
-    implementation("com.github.XilinJia:PodciniLib:1.0.9")
+    implementation("com.github.XilinJia:PodciniLib:1.1.1")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.teamnewpipe:NewPipeExtractor:v0.26.3")
@@ -89,7 +89,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.xilinjia"
             artifactId = "NPEConnector"
-            version = "1.1.1"
+            version = "1.1.2"
             afterEvaluate {
                 from(components["release"])
             }
