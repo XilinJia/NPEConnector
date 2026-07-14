@@ -43,14 +43,13 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         feedId = getEntityId()
         feed_.id = feedId
         feed_.type = feedType
-        feed_.hasVideoMedia = true
         feed_.prefStreamOverDownload = true
         feed_.episodesDownloadable = false
         feed_.autoDownload = false
         return feed_
     }
 
-    suspend fun feedFromChannel(index: Int, title: String): FeedIPC? {
+    suspend fun feedFromChannel(index: Int, title: String, hasVideo: Boolean = true): FeedIPC? {
         val cInfo = channelInfo ?: return null
         if (index >= cInfo.tabs.size) return null
         var url = cInfo.tabs[index].url
@@ -59,6 +58,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
             selectedDownloadUrl = prepareUrl(url)
             val channelTabInfo = ChannelTabInfo.getInfo(service, cInfo.tabs[index])
             val feed_ = setupFeed()
+            feed_.hasVideoMedia = hasVideo
             feed_.title = cInfo.name + " " + title
             feed_.description = cInfo.description
             feed_.author = cInfo.parentChannelName
@@ -72,7 +72,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         }
     }
 
-    suspend fun episodesFromChannel(total: Int, since: Long = 0L): List<EpisodeIPC> {
+    suspend fun episodesFromChannel(total: Int, since: Long = 0L, isAudio: Boolean = false): List<EpisodeIPC> {
         val cInfo = channelInfo ?: return listOf()
 
         val titleSet = hashSetOf<String>()
@@ -88,7 +88,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                     nextPage = null
                     break
                 }
-                val e = r.toEpisodeIPC()
+                val e = r.toEpisodeIPC(isAudio)
                 if (e.title == null || e.title in titleSet) continue
                 titleSet.add(e.title!!)
                 e.feedId = feedId
@@ -110,11 +110,12 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         return eList.toList()
     }
 
-    suspend fun feedFromPlaylist(): FeedIPC? {
+    suspend fun feedFromPlaylist(hasVideo: Boolean = true): FeedIPC? {
         return try {
             playlistInfo = PlaylistInfo.getInfo(service, urlInit) ?: return null
             selectedDownloadUrl = prepareUrl(urlInit)
             val feed_ = setupFeed()
+            feed_.hasVideoMedia = hasVideo
             feed_.title = playlistInfo!!.name
             feed_.description = playlistInfo?.description?.content ?: ""
             feed_.author = playlistInfo?.uploaderName
@@ -128,7 +129,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         }
     }
 
-    suspend fun episodesFromList(total: Int, since: Long = 0L): List<EpisodeIPC> {
+    suspend fun episodesFromList(total: Int, since: Long = 0L, isAudio: Boolean = false): List<EpisodeIPC> {
         val titleSet = hashSetOf<String>()
         var count = 0
         val eList = mutableSetOf<EpisodeIPC>()
@@ -145,7 +146,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                     break
                 }
                 count++
-                val e = r.toEpisodeIPC()
+                val e = r.toEpisodeIPC(isAudio)
                 if (e.title == null || e.title in titleSet) continue
                 e.feedId = feedId
                 eList.add(e)

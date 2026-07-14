@@ -9,7 +9,7 @@ import org.schabi.newpipe.extractor.exceptions.ExtractionException
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItem
 import org.schabi.newpipe.extractor.search.SearchInfo
 
-open class FeedSearcher(val name_: String, val serviceId: Int) : IFeedSearchProvider.Stub() {
+open class FeedSearcher(val name_: String, val serviceId: Int, val contentFilter: List<String> = listOf("channels", "playlists")) : IFeedSearchProvider.Stub() {
     fun ChannelInfoItem.toFeedSearchResult(): FeedSearchResult {
         val title = this.name
         val imageUrl: String? = if (this.thumbnails.isNotEmpty()) this.thumbnails[0].url else null
@@ -31,8 +31,6 @@ open class FeedSearcher(val name_: String, val serviceId: Int) : IFeedSearchProv
         val subscriberCount = 0
         return FeedSearchResult(title, imageUrl, feedUrl, author, count, update, subscriberCount, name_)
     }
-
-    open val contentFilter: List<String> = listOf("channels", "playlists")
 
     override fun search(query: String): List<FeedSearchResult> {
         val service = try { NewPipe.getService(serviceId) } catch (e: ExtractionException) { throw ExtractionException("NewPipe service not found") }

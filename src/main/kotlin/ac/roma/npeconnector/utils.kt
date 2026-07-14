@@ -13,7 +13,7 @@ import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 import org.schabi.newpipe.extractor.stream.VideoStream
 
-fun StreamInfoItem.toEpisodeIPC(): EpisodeIPC {
+fun StreamInfoItem.toEpisodeIPC(isAudio: Boolean = false): EpisodeIPC {
     val e = EpisodeIPC()
     e.link = this.url
     e.title = this.name
@@ -22,7 +22,7 @@ fun StreamInfoItem.toEpisodeIPC(): EpisodeIPC {
     e.pubDate = this.uploadDate?.localDateTime?.toKotlinLocalDateTime()?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds() ?: 0
     e.viewCount = this.viewCount.toInt()
     e.size = 0
-    e.mimeType = "video/*"
+    e.mimeType = if (isAudio) "audio/*" else "video/*"
     e.fileUrl = null
     e.downloadUrl = this.url
     if (this.duration > 0) e.duration = this.duration.toInt() * 1000
@@ -30,7 +30,7 @@ fun StreamInfoItem.toEpisodeIPC(): EpisodeIPC {
     return e
 }
 
-fun StreamInfo.toEpisodeIPC(): EpisodeIPC {
+fun StreamInfo.toEpisodeIPC(isAudio: Boolean = false): EpisodeIPC {
     val e = EpisodeIPC()
     e.link = this.url
     e.title = this.name
@@ -41,7 +41,7 @@ fun StreamInfo.toEpisodeIPC(): EpisodeIPC {
     e.likeCount = this.likeCount.toInt()
     e.downloadUrl = this.url
     e.size = 0
-    e.mimeType = "video/*"
+    e.mimeType = if (isAudio) "audio/*" else "video/*"
     if (this.duration > 0) e.duration = this.duration.toInt() * 1000
     return e
 }

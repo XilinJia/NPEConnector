@@ -1,3 +1,8 @@
+# 1.1.1
+
+* enabled hasVideo option in buildFeed
+* enable isAudio option in buildEpisode
+* contentFilter is a parameter rather than an open member in both FeedSearcher and MediaSearcher
 
 # 1.1.0
 
