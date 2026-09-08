@@ -1,3 +1,7 @@
+# 1.1.4
+
+* some dependencies update
+
 # 1.1.3
 
 * upped PodciniLib to 1.1.2

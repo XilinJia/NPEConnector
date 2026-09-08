@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.library") version "9.2.1"
+    id("com.android.library") version "9.4.0"
     id("org.jetbrains.kotlin.plugin.parcelize") version "2.4.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
     id("maven-publish")
@@ -64,21 +64,21 @@ buildscript {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.19.0")
-    implementation("androidx.compose.runtime:runtime:1.11.4")
+    implementation("androidx.compose.runtime:runtime:1.12.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
 
-    implementation("io.ktor:ktor-http:3.5.1")
-    implementation("io.ktor:ktor-client-core:3.5.1")
-    implementation("io.ktor:ktor-client-okhttp:3.5.1")
-    implementation("io.ktor:ktor-client-cio:3.5.1")
-    implementation("io.ktor:ktor-utils:3.5.1")
+    implementation("io.ktor:ktor-http:3.5.2")
+    implementation("io.ktor:ktor-client-core:3.5.2")
+    implementation("io.ktor:ktor-client-okhttp:3.5.2")
+    implementation("io.ktor:ktor-client-cio:3.5.2")
+    implementation("io.ktor:ktor-utils:3.5.2")
 
     implementation("com.github.XilinJia:PodciniLib:1.1.2")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
-    implementation("com.github.teamnewpipe:NewPipeExtractor:v0.26.3")
+    implementation("com.github.teamnewpipe:NewPipeExtractor:v0.26.5")
     implementation("com.github.TeamNewPipe:nanojson:e9d656ddb49a412a5a0a5d5ef20ca7ef09549996")
     implementation("io.reactivex.rxjava3:rxjava:3.1.12")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
@@ -89,7 +89,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.xilinjia"
             artifactId = "NPEConnector"
-            version = "1.1.3"
+            version = "1.1.4"
             afterEvaluate {
                 from(components["release"])
             }

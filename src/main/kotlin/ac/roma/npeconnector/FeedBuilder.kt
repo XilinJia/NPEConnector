@@ -130,6 +130,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
     }
 
     suspend fun episodesFromList(total: Int, since: Long = 0L, isAudio: Boolean = false): List<EpisodeIPC> {
+//        Log.d(TAG, "episodesFromList total: $total since: $since isAudio: $isAudio")
         val titleSet = hashSetOf<String>()
         var count = 0
         val eList = mutableSetOf<EpisodeIPC>()
@@ -148,6 +149,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                 count++
                 val e = r.toEpisodeIPC(isAudio)
                 if (e.title == null || e.title in titleSet) continue
+//                Log.d(TAG, "episodesFromList $count episode: ${e.title}")
                 e.feedId = feedId
                 eList.add(e)
                 if (total > 0 && eList.size >= total) return eList.toList()
@@ -157,6 +159,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                 val page = PlaylistInfo.getMoreItems(service, urlInit, nextPage)
                 nextPage = page?.nextPage
                 streamInfoItems = page?.items ?: listOf()
+//                Log.d(TAG, "episodesFromList nextPage ${nextPage?.id} streamInfoItems: ${streamInfoItems.size}")
                 curItemIndex = 0
             } catch (e: Throwable) {
                 Log.e(TAG, "episodesFromList PlaylistInfo.getMoreItems error: ${e.message}")
