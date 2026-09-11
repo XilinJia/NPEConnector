@@ -44,7 +44,6 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         feed_.id = feedId
         feed_.type = feedType
         feed_.prefStreamOverDownload = true
-        feed_.episodesDownloadable = false
         feed_.autoDownload = false
         return feed_
     }

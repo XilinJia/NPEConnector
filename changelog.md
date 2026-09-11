@@ -1,3 +1,9 @@
+# 1.1.5
+
+* upped PodciniLib to 1.1.3
+* gradle upped to 9.7.1 
+* upped some dependencies and removed some unused ones
+
 # 1.1.4
 
 * some dependencies update
