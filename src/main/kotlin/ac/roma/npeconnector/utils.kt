@@ -48,7 +48,7 @@ fun StreamInfo.toEpisodeIPC(isAudio: Boolean = false): EpisodeIPC {
     return e
 }
 
-fun SubtitlesStream.toCaptionSpac(): CaptionSpec {
+fun SubtitlesStream.toCaptionSpec(): CaptionSpec {
     val c = CaptionSpec(this.content)
     c.language = this.locale.language
     c.mimeType = this.format?.mimeType
