@@ -1,6 +1,7 @@
 package ac.roma.npeconnector
 
 import ac.mdiq.podcini.shared.AudioSpec
+import ac.mdiq.podcini.shared.CaptionSpec
 import ac.mdiq.podcini.shared.EpisodeIPC
 import ac.mdiq.podcini.shared.VideoSpec
 import android.util.Log
@@ -11,6 +12,7 @@ import kotlinx.datetime.toKotlinLocalDateTime
 import org.schabi.newpipe.extractor.stream.AudioStream
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
+import org.schabi.newpipe.extractor.stream.SubtitlesStream
 import org.schabi.newpipe.extractor.stream.VideoStream
 
 fun StreamInfoItem.toEpisodeIPC(isAudio: Boolean = false): EpisodeIPC {
@@ -44,6 +46,14 @@ fun StreamInfo.toEpisodeIPC(isAudio: Boolean = false): EpisodeIPC {
     e.mimeType = if (isAudio) "audio/*" else "video/*"
     if (this.duration > 0) e.duration = this.duration.toInt() * 1000
     return e
+}
+
+fun SubtitlesStream.toCaptionSpac(): CaptionSpec {
+    val c = CaptionSpec(this.content)
+    c.language = this.locale.language
+    c.mimeType = this.format?.mimeType
+    c.suffix = this.format?.suffix
+    return c
 }
 
 fun AudioStream.toAudioSpec(): AudioSpec {
