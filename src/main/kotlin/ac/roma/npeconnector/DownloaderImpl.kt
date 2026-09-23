@@ -8,6 +8,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.request
 import io.ktor.http.HttpMethod
 import io.ktor.http.headers
+import io.ktor.http.userAgent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.schabi.newpipe.extractor.downloader.Downloader

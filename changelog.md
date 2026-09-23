@@ -1,3 +1,9 @@
+# 1.1.7
+
+* PodciniLib upped to 1.1.5
+* kotlin upped to 2.4.20
+* some dependencies update
+
 # 1.1.6
 
 * upped PodciniLib to 1.1.4
