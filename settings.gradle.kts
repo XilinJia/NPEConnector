@@ -17,3 +17,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "NPEConnector"
 include(":")
+
+// includeBuild("../PodciniLib") {
+//     dependencySubstitution {
+//         substitute(module("com.github.XilinJia:PodciniLib"))
+//             .using(project(":"))
+//     }
+// }

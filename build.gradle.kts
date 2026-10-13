@@ -1,8 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id("com.android.library") version "9.4.1"
-    id("org.jetbrains.kotlin.plugin.parcelize") version "2.4.20"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.20"
+    id("org.jetbrains.kotlin.plugin.parcelize") version "2.4.21"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
     id("maven-publish")
 }
 
@@ -18,13 +18,6 @@ android {
         minSdk = 26
         consumerProguardFiles("consumer-rules.pro")
     }
-
-      // sourceSets {
-      //     getByName("main") {
-      //         kotlin.directories.add("../../PodciniLib/src/main/kotlin")
-      //         aidl.directories.add("../../PodciniLib/src/main/aidl")
-      //     }
-      // }
 
     buildTypes {
         release {
@@ -53,7 +46,7 @@ android {
 }
 
 buildscript {
-    val kotlinVersion by extra("2.4.20")
+    val kotlinVersion by extra("2.4.21")
     repositories {
         mavenCentral()
     }
@@ -63,7 +56,7 @@ buildscript {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.19.0")
+    implementation("androidx.core:core-ktx:1.19.1")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
@@ -73,7 +66,7 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:3.6.0")
     implementation("io.ktor:ktor-utils:3.6.0")
 
-   implementation("com.github.XilinJia:PodciniLib:1.1.5")
+   implementation("com.github.XilinJia:PodciniLib:1.1.6")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.teamnewpipe:NewPipeExtractor:v0.26.5")
@@ -87,7 +80,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.xilinjia"
             artifactId = "NPEConnector"
-            version = "1.1.7"
+            version = "1.1.8"
             afterEvaluate {
                 from(components["release"])
             }

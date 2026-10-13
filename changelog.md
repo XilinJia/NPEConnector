@@ -1,3 +1,9 @@
+# 1.1.8
+
+* PodciniLib upped to 1.1.6
+* amended downloader
+* kotlin upped to 2.4.21
+
 # 1.1.7
 
 * PodciniLib upped to 1.1.5
