@@ -61,12 +61,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
 
-    implementation("io.ktor:ktor-http:3.6.0")
-    implementation("io.ktor:ktor-client-core:3.6.0")
-    implementation("io.ktor:ktor-client-okhttp:3.6.0")
-    implementation("io.ktor:ktor-utils:3.6.0")
+    implementation("io.ktor:ktor-http:3.6.1")
+    implementation("io.ktor:ktor-client-core:3.6.1")
+    implementation("io.ktor:ktor-client-okhttp:3.6.1")
+    implementation("io.ktor:ktor-utils:3.6.1")
 
-   implementation("com.github.XilinJia:PodciniLib:1.1.6")
+   implementation("com.github.XilinJia:PodciniLib:1.1.7")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.teamnewpipe:NewPipeExtractor:v0.26.5")
@@ -80,7 +80,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.xilinjia"
             artifactId = "NPEConnector"
-            version = "1.1.8"
+            version = "1.1.9"
             afterEvaluate {
                 from(components["release"])
             }
