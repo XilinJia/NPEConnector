@@ -87,6 +87,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
                     nextPage = null
                     break
                 }
+//                Log.d(TAG, "episodesFromList privacy: ${r.pri}")
                 val e = r.toEpisodeIPC(isAudio)
                 if (e.title == null || e.title in titleSet) continue
                 titleSet.add(e.title!!)

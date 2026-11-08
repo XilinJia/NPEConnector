@@ -1,3 +1,7 @@
+# 1.1.10
+
+* PodciniLib upped to 1.1.8
+
 # 1.1.9
 
 * PodciniLib upped to 1.1.7
