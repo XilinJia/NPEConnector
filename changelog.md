@@ -1,3 +1,9 @@
+# 1.1.12
+
+* enhanced getting episodes from playlist
+    * allow episodes with no update date
+    * return after a loop getting no new episodes, to work around infinite list
+
 # 1.1.11
 
 * NewPipeExtractor upped to 0.27.1

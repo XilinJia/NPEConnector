@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.library") version "9.5.1"
+    id("com.android.library") version "9.5.3"
     id("org.jetbrains.kotlin.plugin.parcelize") version "2.4.21"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
     id("maven-publish")
@@ -68,7 +68,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:3.6.1")
     implementation("io.ktor:ktor-client-okhttp:3.6.1")
 
-   implementation("com.github.XilinJia:PodciniLib:1.1.8")
+   implementation("com.github.XilinJia:PodciniLib:1.1.9")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.teamnewpipe:NewPipeExtractor:v0.27.1")
@@ -79,7 +79,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.xilinjia"
             artifactId = "NPEConnector"
-            version = "1.1.11"
+            version = "1.1.12"
             afterEvaluate {
                 from(components["release"])
             }

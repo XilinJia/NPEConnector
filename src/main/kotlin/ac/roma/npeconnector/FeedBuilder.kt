@@ -121,6 +121,7 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
             feed_.author = playlistInfo?.uploaderName
             feed_.imageUrl = if (playlistInfo!!.thumbnails.isNotEmpty()) playlistInfo!!.thumbnails.first().url else null
             streamInfoItems = playlistInfo!!.relatedItems
+//            Log.d(TAG, "feedFromPlaylist streamInfoItems: ${streamInfoItems.size}")
             nextPage = playlistInfo?.nextPage
             withContext(Dispatchers.Main) { return@withContext feed_ }
         } catch (e: Throwable) {
@@ -134,30 +135,43 @@ class FeedBuilder(val feedType: String, var urlInit: String, val service: Stream
         val titleSet = hashSetOf<String>()
         var count = 0
         val eList = mutableSetOf<EpisodeIPC>()
+        var listSize = 0
         while (streamInfoItems.isNotEmpty()) {
             for (i in curItemIndex until streamInfoItems.size) {
+//                Log.d(TAG, "episodesFromList i: $i of ${streamInfoItems.size}")
                 val r = streamInfoItems[i]
                 curItemIndex = i + 1
                 if (r.infoType != InfoItem.InfoType.STREAM) {
 //                    Log.d(TAG, "episodesFromList relatedItem is not STREAM, ignored")
                     continue
                 }
-                if ((r.uploadDate?.localDateTime?.toKotlinLocalDateTime()?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds() ?: 0) <= since) {
+                val upDate = r.uploadDate?.localDateTime?.toKotlinLocalDateTime()?.toInstant(TimeZone.currentSystemDefault())?.toEpochMilliseconds()
+//                Log.d(TAG, "episodesFromList r.uploadDate: $upDate")
+                if (upDate != null && upDate <= since) {
+//                    Log.d(TAG, "episodesFromList r.uploadDate old $upDate, ignored")
                     nextPage = null
                     break
                 }
                 count++
                 val e = r.toEpisodeIPC(isAudio)
+//                Log.d(TAG, "episodesFromList e: ${e.title}")
                 if (e.title == null || e.title in titleSet) continue
-//                Log.d(TAG, "episodesFromList $count episode: ${e.title}")
+                titleSet.add(e.title!!)
+//                Log.d(TAG, "episodesFromList count $count adding episode: ${e.title}")
+//                Log.d(TAG, "episodesFromList viewCount: ${e.viewCount} likeCount: ${e.likeCount}")
                 e.feedId = feedId
                 eList.add(e)
                 if (total > 0 && eList.size >= total) return eList.toList()
             }
+//            Log.d(TAG, "episodesFromList after for nextPage: ${nextPage!=null} count: $count listSize: $listSize eList: ${eList.size}")
+            if (eList.size == listSize) return eList.toList()
+            listSize = eList.size
             if (nextPage == null || count > EPISODES_LIMIT) return eList.toList()
             try {
                 val page = PlaylistInfo.getMoreItems(service, urlInit, nextPage)
                 nextPage = page?.nextPage
+//                Log.d(TAG, "episodesFromList nextPage: ${nextPage!=null}")
+                if (nextPage == null) return eList.toList()
                 streamInfoItems = page?.items ?: listOf()
 //                Log.d(TAG, "episodesFromList nextPage ${nextPage?.id} streamInfoItems: ${streamInfoItems.size}")
                 curItemIndex = 0
